@@ -498,30 +498,37 @@ class COCOeval:
         def _summarizeDets():
             stats = np.zeros((12, ))
             stats[0] = _summarize(1)
-            stats[1] = _summarize(1, iouThr=.5, maxDets=self.params.maxDets[2])
-            stats[2] = _summarize(1,
+            stats[1] = _summarize(1, iouThr=.25, maxDets=self.params.maxDets[2])
+            stats[2] = _summarize(1, iouThr=.5, maxDets=self.params.maxDets[2])
+            stats[3] = _summarize(1,
                                   iouThr=.75,
                                   maxDets=self.params.maxDets[2])
-            stats[3] = _summarize(1,
-                                  areaRng='small',
-                                  maxDets=self.params.maxDets[2])
             stats[4] = _summarize(1,
-                                  areaRng='medium',
+                                  areaRng='verytiny',
                                   maxDets=self.params.maxDets[2])
             stats[5] = _summarize(1,
-                                  areaRng='large',
+                                  areaRng='tiny',
                                   maxDets=self.params.maxDets[2])
-            stats[6] = _summarize(0, maxDets=self.params.maxDets[0])
-            stats[7] = _summarize(0, maxDets=self.params.maxDets[1])
-            stats[8] = _summarize(0, maxDets=self.params.maxDets[2])
-            stats[9] = _summarize(0,
+            stats[6] = _summarize(1,
                                   areaRng='small',
                                   maxDets=self.params.maxDets[2])
-            stats[10] = _summarize(0,
-                                   areaRng='medium',
-                                   maxDets=self.params.maxDets[2])
+            stats[7] = _summarize(1,
+                                  areaRng='medium',
+                                  maxDets=self.params.maxDets[2])
+            stats[8] = _summarize(0, maxDets=self.params.maxDets[0])
+            stats[9] = _summarize(0, maxDets=self.params.maxDets[1])
+            stats[10] = _summarize(0, maxDets=self.params.maxDets[2])
             stats[11] = _summarize(0,
-                                   areaRng='large',
+                                  areaRng='verytiny',
+                                  maxDets=self.params.maxDets[2])
+            stats[12] = _summarize(0,
+                                   areaRng='tiny',
+                                   maxDets=self.params.maxDets[2])
+            stats[13] = _summarize(0,
+                                   areaRng='small',
+                                   maxDets=self.params.maxDets[2])
+            stats[14] = _summarize(0,
+                                   areaRng='medium',
                                    maxDets=self.params.maxDets[2])
             return stats
 
@@ -569,10 +576,10 @@ class Params:
                                    1.00,
                                    int(np.round((1.00 - .0) / .01)) + 1,
                                    endpoint=True)
-        self.maxDets = [1, 10, 100]
-        self.areaRng = [[0**2, 1e5**2], [0**2, 32**2], [32**2, 96**2],
-                        [96**2, 1e5**2]]
-        self.areaRngLbl = ['all', 'small', 'medium', 'large']
+        self.maxDets = [1, 100, 1500]
+        self.areaRng = [[0**2, 1e5**2], [0**2, 8**2], [8**2, 16**2], [16**2, 32**2],
+                        [32**2, 1e5**2]]
+        self.areaRngLbl = ['all', 'verytiny', 'tiny', 'small', 'medium']
         self.useCats = 1
 
     def setKpParams(self):
