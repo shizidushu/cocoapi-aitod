@@ -12,7 +12,7 @@ import os
 from collections import defaultdict
 from urllib.request import urlretrieve
 
-import pycocotools.mask as mask_utils
+import aitodpycocotools.mask as mask_utils
 
 
 class LVIS:

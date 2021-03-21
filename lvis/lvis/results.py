@@ -2,7 +2,7 @@ import logging
 from collections import defaultdict
 from copy import deepcopy
 
-import pycocotools.mask as mask_utils
+import aitodpycocotools.mask as mask_utils
 
 from .lvis import LVIS
 

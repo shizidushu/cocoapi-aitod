@@ -10,8 +10,8 @@ from setuptools import Extension, setup
 
 ext_modules = [
     Extension(
-        'pycocotools._mask',
-        sources=['common/maskApi.c', 'pycocotools/_mask.pyx'],
+        'aitodpycocotools._mask',
+        sources=['common/maskApi.c', 'aitodpycocotools/_mask.pyx'],
         include_dirs=[np.get_include(), 'common'],
         # extra_compile_args=['-Wno-cpp', '-Wno-unused-function', '-std=c99'],
         extra_compile_args=[],
@@ -19,8 +19,8 @@ ext_modules = [
 ]
 
 setup(name='aitodpycocotools',
-      packages=['pycocotools'],
-      package_dir={'pycocotools': 'pycocotools'},
+      packages=['aitodpycocotools'],
+      package_dir={'aitodpycocotools': 'aitodpycocotools'},
       install_requires=[
           'setuptools>=18.0', 'cython>=0.27.3', 'matplotlib>=2.1.0'
       ],

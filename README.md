@@ -8,7 +8,7 @@ Currently, you could install by run
 
 ```shell
 # Install cocoapi
-pip install "git+https://github.com/jwwangchn/cocoapi-aitod.git#subdirectory=pycocotools"
+pip install "git+https://github.com/jwwangchn/cocoapi-aitod.git#subdirectory=aitodpycocotools"
 ```
 
 ## Reference

@@ -1,2 +1,2 @@
-include pycocotools/pycocotools/*.pyx
+include aitodpycocotools/aitodpycocotools/*.pyx
 include lvis/requirements.txt
