@@ -334,7 +334,7 @@ class COCOeval:
             'dtIoUs': dtIoU,
         }
 
-    def accumulate(self, p=None):
+    def accumulate(self, p=None, with_lrp=True):
         '''
         Accumulate per image evaluation results and store the result in
         self.eval
@@ -455,39 +455,40 @@ class COCOeval:
                         precision[t, :, k, a, m] = np.array(q)
                         scores[t, :, k, a, m] = np.array(ss)
                     
-                    # oLRP and Opt.Thr. Computation
-                    tp_num = np.cumsum(tps[0, :])
-                    fp_num = np.cumsum(fps[0, :])
-                    fn_num = npig - tp_num
-                    # If there is detection
-                    if tp_num.shape[0] > 0:
-                        # There is some TPs
-                        if tp_num[-1] > 0:
-                            total_loc = tp_num - np.cumsum(dtIoU[0, :])
-                            lrps = (total_loc / (1 - _pe.iouThrs[0]) + fp_num +
-                                    fn_num) / (tp_num + fp_num + fn_num)
-                            opt_pos_idx = np.argmin(lrps)
-                            olrp[k, a, m] = lrps[opt_pos_idx]
-                            olrp_loc[k, a, m] = total_loc[opt_pos_idx] / \
-                                tp_num[opt_pos_idx]
-                            olrp_fp[k, a, m] = fp_num[opt_pos_idx] / \
-                                (tp_num[opt_pos_idx] + fp_num[opt_pos_idx])
-                            olrp_fn[k, a, m] = fn_num[opt_pos_idx] / npig
-                            lrp_opt_thr[k, a, m] = dtScoresSorted[opt_pos_idx]
-                        # There is No TP
+                    if with_lrp:
+                        # oLRP and Opt.Thr. Computation
+                        tp_num = np.cumsum(tps[0, :])
+                        fp_num = np.cumsum(fps[0, :])
+                        fn_num = npig - tp_num
+                        # If there is detection
+                        if tp_num.shape[0] > 0:
+                            # There is some TPs
+                            if tp_num[-1] > 0:
+                                total_loc = tp_num - np.cumsum(dtIoU[0, :])
+                                lrps = (total_loc / (1 - _pe.iouThrs[0]) + fp_num +
+                                        fn_num) / (tp_num + fp_num + fn_num)
+                                opt_pos_idx = np.argmin(lrps)
+                                olrp[k, a, m] = lrps[opt_pos_idx]
+                                olrp_loc[k, a, m] = total_loc[opt_pos_idx] / \
+                                    tp_num[opt_pos_idx]
+                                olrp_fp[k, a, m] = fp_num[opt_pos_idx] / \
+                                    (tp_num[opt_pos_idx] + fp_num[opt_pos_idx])
+                                olrp_fn[k, a, m] = fn_num[opt_pos_idx] / npig
+                                lrp_opt_thr[k, a, m] = dtScoresSorted[opt_pos_idx]
+                            # There is No TP
+                            else:
+                                olrp_loc[k, a, m] = np.nan
+                                olrp_fp[k, a, m] = np.nan
+                                olrp_fn[k, a, m] = 1.
+                                olrp[k, a, m] = 1.
+                                lrp_opt_thr[k, a, m] = np.nan
+                        # No detection
                         else:
                             olrp_loc[k, a, m] = np.nan
                             olrp_fp[k, a, m] = np.nan
                             olrp_fn[k, a, m] = 1.
                             olrp[k, a, m] = 1.
                             lrp_opt_thr[k, a, m] = np.nan
-                    # No detection
-                    else:
-                        olrp_loc[k, a, m] = np.nan
-                        olrp_fp[k, a, m] = np.nan
-                        olrp_fn[k, a, m] = 1.
-                        olrp[k, a, m] = 1.
-                        lrp_opt_thr[k, a, m] = np.nan
         self.eval = {
             'params': p,
             'counts': [T, R, K, A, M],
